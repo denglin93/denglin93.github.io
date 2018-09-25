@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="gbk">
+<title>xiaolin个人博客 - 一个大数据开发工程师的博客网站</title>
+<meta name="keywords" content="xiaolin个人博客" />
+<meta name="description" content="xiaolin个人博客" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../css/base.css" rel="stylesheet">
+<link href="../css/index.css" rel="stylesheet">
+<link href="../css/m.css" rel="stylesheet">
+<!--[if lt IE 9]>
+<script src="js/modernizr.js"></script>
+<![endif]-->
+</head>
+<body>
+<header>
+  <div class="logo"><a href="/"><img src="../images/logo.png"></a></div>
+  <nav id="nav">
+    <ul>
+      <li><a href="../index.html">网站首页</a></li>
+      <li><a href="../share.html">个人随笔</a></li>
+      <li><a href="../list.html">分类列表</a></li>
+	  <li><a href="../scap.html">爬虫日记</a></li>
+      <li><a href="../info.html">修订日志</a></li>
+	  <li><a href="../gbook.html">游客留言</a></li>
+	  <li><a href="../about.html">关于我</a></li>
+    </ul>
+  </nav>   
+  <script>
+window.onload = function ()
+{
+var obj=null;
+var As=document.getElementById('nav').getElementsByTagName('a');
+obj = As[0];
+for(i=1;i<As.length;i++){if(window.location.href.indexOf(As[i].href)>=0)
+obj=As[i];}
+obj.id='selected'
+}
+</script> 
+</header>
+<div class="mnav">
+    
+  </div>
+<article>
+ 
+ 
+<p>Caused by: java.io.NotSerializableException: org.apache.log4j.Logger<br>
+Serialization stack:</p>
+<ul>
+<li>object not serializable (class: org.apache.log4j.Logger, value: org.apache.log4j.Logger@149ff4b5)</li>
+<li>field (class: com.bluedon.dataMatch.NTADataProcess, name: log, type: class org.apache.log4j.Logger)</li>
+<li>object (class com.bluedon.dataMatch.NTADataProcess, com.bluedon.dataMatch.NTADataProcess@288c751a)</li>
+<li>field (class: com.bluedon.dataMatch.NTADataProcess$$anonfun$ntaflowProcess$1, name: $outer, type: class com.bluedon.dataMatch.NTADataProcess)</li>
+<li>object (class com.bluedon.dataMatch.NTADataProcess$$anonfun$ntaflowProcess$1, &lt;function1&gt;)</li>
+<li>field (class: com.bluedon.dataMatch.NTADataProcess\[anonfun$ntaflowProcess$1\]anonfun$apply$1, name: $outer, type: class com.bluedon.dataMatch.NTADataProcess$$anonfun$ntaflowProcess$1)</li>
+<li>object (class com.bluedon.dataMatch.NTADataProcess\[anonfun$ntaflowProcess$1\]anonfun$apply$1, &lt;function1&gt;)<br>
+at org.apache.spark.serializer.SerializationDebugger$.improveException(SerializationDebugger.scala:40)<br>
+at org.apache.spark.serializer.JavaSerializationStream.writeObject(JavaSerializer.scala:46)<br>
+at org.apache.spark.serializer.JavaSerializerInstance.serialize(JavaSerializer.scala:100)<br>
+at org.apache.spark.util.ClosureCleaner$.ensureSerializable(ClosureCleaner.scala:295)</li>
+</ul>
+<p>... 30 more</p>
+<p><img src="../artimg/scala_1.png" alt=""><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="" title="点击并拖拽以移动">?</p>
+<p>log的文件是</p>
+<pre><code class="language-html">trait LogSupport {   val log = Logger.getLogger(this.getClass)}
+</code></pre>
+<pre><code class="language-html">原因是因为在foreachRDD中是分区并行执行的，及时logsupport实现序列化也会报错，解决方案是在
+</code></pre>
+<pre><code class="language-html">@transient lazy val log = Logger.getLogger(this.getClass)
+</code></pre>
+ 
+</article>
+<footer>
+   <p>Design by <a href="index.html" target="_blank">xiaolin93个人博客</a> <a href="/"></a></p>
+</footer>
+
+</body>
+</html>
